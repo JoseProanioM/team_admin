@@ -18,7 +18,7 @@ COLORS = {
 
 USERS = {
     'jproano': {'password': 'leader123', 'role': 'Team Leader', 'permissions': ['view', 'create', 'edit', 'delete', 'assign']},
-    'vpachego': {'password': 'member123', 'role': 'Team Member', 'permissions': ['view', 'create', 'edit_own']},
+    'vpacheco': {'password': 'member123', 'role': 'Team Member', 'permissions': ['view', 'create', 'edit_own']},
     'dguerra': {'password': 'member123', 'role': 'Team Member', 'permissions': ['view', 'create', 'edit_own']}
 }
 
