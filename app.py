@@ -18,7 +18,7 @@ COLORS = {
 
 USERS = {
     'jproano': {'password': 'leader123', 'role': 'Team Leader', 'permissions': ['view', 'create', 'edit', 'delete', 'assign']},
-    'vpacheco': {'password': 'member123', 'role': 'Team Member', 'permissions': ['view', 'create', 'edit_own']},
+    'vpachego': {'password': 'member123', 'role': 'Team Member', 'permissions': ['view', 'create', 'edit_own']},
     'dguerra': {'password': 'member123', 'role': 'Team Member', 'permissions': ['view', 'create', 'edit_own']}
 }
 
@@ -242,7 +242,7 @@ def dashboard_page():
     st.markdown(f"""
     <div style="background: linear-gradient(90deg, {COLORS['primary']}, {COLORS['secondary']}); 
                 padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-        <h1 style="color: white; margin: 0;">📊 Team Dashboard</h1>
+        <h1 style="color: white; margin: 0;">Team Dashboard</h1>
         <p style="color: white; margin: 5px 0;">Welcome back, {st.session_state.user_role}: {st.session_state.username}</p>
     </div>
     """, unsafe_allow_html=True)
@@ -259,34 +259,34 @@ def dashboard_page():
     
     with col1:
         st.metric(
-            label="📋 Total Tasks",
+            label="Total Tasks",
             value=total_tasks,
             delta=f"+{len([t for t in st.session_state.tasks if t['created_date'].startswith(datetime.now().strftime('%Y-%m-%d'))])}"
         )
     
     with col2:
         st.metric(
-            label="✅ Completed",
+            label="Completed",
             value=completed_tasks,
             delta=f"{(completed_tasks/total_tasks*100):.1f}%" if total_tasks > 0 else "0%"
         )
     
     with col3:
         st.metric(
-            label="🔄 In Progress",
+            label="In Progress",
             value=in_progress
         )
     
     with col4:
         st.metric(
-            label="⚠️ Overdue",
+            label="Overdue",
             value=overdue_tasks,
             delta="Critical" if overdue_tasks > 0 else "None"
         )
     
     # Charts
     if st.session_state.tasks:
-        st.subheader("📈 Progress Analytics")
+        st.subheader("Progress Analytics")
         
         fig_status, fig_priority, fig_workload = create_progress_summary()
         
@@ -299,13 +299,13 @@ def dashboard_page():
         st.plotly_chart(fig_workload, use_container_width=True)
         
         # Gantt Chart
-        st.subheader("📅 Project Timeline")
+        st.subheader("Project Timeline")
         gantt_fig = create_gantt_chart()
         if gantt_fig:
             st.plotly_chart(gantt_fig, use_container_width=True)
         
         # Recent Tasks Table
-        st.subheader("📝 Recent Tasks")
+        st.subheader("Recent Tasks")
         df_display = pd.DataFrame(st.session_state.tasks)
         if not df_display.empty:
             df_display = df_display[['title', 'assigned_to', 'status', 'priority', 'end_date', 'progress', 'created_date', 'updated_date']]
@@ -314,21 +314,21 @@ def dashboard_page():
             st.dataframe(df_display, use_container_width=True)
             
             # CSV export info
-            st.info(f"💾 All tasks are automatically saved to '{TASKS_CSV_FILE}' - Total tasks: {len(st.session_state.tasks)}")
+            st.info(f"All tasks are automatically saved to '{TASKS_CSV_FILE}' - Total tasks: {len(st.session_state.tasks)}")
     else:
         st.info("No tasks available. Create your first task in the Task Management section!")
-        st.info("💡 Tasks will be automatically saved to CSV file for persistence.")
+        st.info("Tasks will be automatically saved to CSV file for persistence.")
 
 def task_management_page():
     st.markdown(f"""
     <div style="background: linear-gradient(90deg, {COLORS['accent']}, {COLORS['highlight']}); 
                 padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-        <h1 style="color: white; margin: 0;">📋 Task Management</h1>
+        <h1 style="color: white; margin: 0;">Task Management</h1>
         <p style="color: white; margin: 5px 0;">Create, edit, and manage tasks</p>
     </div>
     """, unsafe_allow_html=True)
     
-    tab1, tab2, tab3 = st.tabs(["➕ Create Task", "📝 Edit Tasks", "👥 My Tasks"])
+    tab1, tab2, tab3 = st.tabs(["Create Task", "Edit Tasks", "My Tasks"])
     
     with tab1:
         st.subheader("Create New Task")
@@ -586,26 +586,26 @@ def main():
             st.markdown(f"""
             <div style="text-align: center; padding: 20px; background: {COLORS['primary']}; 
                         border-radius: 10px; margin-bottom: 20px;">
-                <h3 style="color: white; margin: 0;">👤 {st.session_state.username}</h3>
+                <h3 style="color: white; margin: 0;">{st.session_state.username}</h3>
                 <p style="color: white; margin: 5px 0;">{st.session_state.user_role}</p>
             </div>
             """, unsafe_allow_html=True)
             
             page = st.radio(
                 "Navigation",
-                ["📊 Dashboard", "📋 Task Management"],
+                ["Dashboard", "Task Management"],
                 key="navigation"
             )
             
             st.markdown("---")
             
-            if st.button("🚪 Logout", use_container_width=True):
+            if st.button("Logout", use_container_width=True):
                 logout()
                 st.rerun()
             
             # Quick Stats in Sidebar
             if st.session_state.tasks:
-                st.markdown("### 📈 Quick Stats")
+                st.markdown("### Quick Stats")
                 my_tasks = len(get_user_tasks(st.session_state.username))
                 st.metric("My Tasks", my_tasks)
                 
@@ -616,16 +616,16 @@ def main():
                 
                 # CSV info
                 st.markdown("---")
-                st.markdown("### 💾 Data Storage")
+                st.markdown("### Data Storage")
                 if os.path.exists(TASKS_CSV_FILE):
                     file_size = os.path.getsize(TASKS_CSV_FILE)
-                    st.write(f"📁 CSV File: {file_size} bytes")
+                    st.write(f"CSV File: {file_size} bytes")
                     
                     # Download CSV button
                     with open(TASKS_CSV_FILE, 'r') as f:
                         csv_data = f.read()
                     st.download_button(
-                        label="📥 Download CSV",
+                        label="Download CSV",
                         data=csv_data,
                         file_name=f"team_tasks_{datetime.now().strftime('%Y%m%d')}.csv",
                         mime="text/csv",
@@ -634,17 +634,17 @@ def main():
                     
                     # Backup button (only for team leader)
                     if st.session_state.user_role == "Team Leader":
-                        if st.button("🔄 Create Backup", use_container_width=True):
+                        if st.button("Create Backup", use_container_width=True):
                             backup_file = backup_csv()
                             if backup_file:
                                 st.success(f"Backup created: {backup_file}")
                 else:
-                    st.write("📁 No CSV file yet")
+                    st.write("No CSV file yet")
         
         # Main content
-        if page == "📊 Dashboard":
+        if page == "Dashboard":
             dashboard_page()
-        elif page == "📋 Task Management":
+        elif page == "Task Management":
             task_management_page()
 
 if __name__ == "__main__":
